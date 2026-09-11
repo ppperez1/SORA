@@ -90,8 +90,8 @@
     </Publisher>
     <RootComponents>
       <RootComponent type="29" id="{e4b3c2d1-0000-4000-8000-112233445566}" behavior="0" />
-      <RootComponent type="10080" schemaName="rmc_sharedsharepointonline_sora" behavior="0" />
-      <RootComponent type="10080" schemaName="rmc_sharedexcelonlinebusiness_sora" behavior="0" />
+      <RootComponent type="10080" schemaName="new_sharedsharepointonline_83213" behavior="0" />
+      <RootComponent type="10080" schemaName="new_sharedexcelonlinebusiness_d9653" behavior="0" />
     </RootComponents>
     <MissingDependencies />
   </SolutionManifest>

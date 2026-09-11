@@ -40,14 +40,16 @@
   <SolutionPluginAssemblies />
   <EntityDataProviders />
   <connectionreferences>
-    <connectionreference connectionreferencelogicalname="rmc_sharedsharepointonline_sora">
+    <connectionreference connectionreferencelogicalname="new_sharedsharepointonline_83213">
+      <connectionid>shared-sharepointonl-832133e4-a097-402f-8cc3-7022e4fe9ea9</connectionid>
       <connectionreferencedisplayname>SharePoint Online SORA</connectionreferencedisplayname>
       <connectorid>/providers/Microsoft.PowerApps/apis/shared_sharepointonline</connectorid>
       <iscustomizable>1</iscustomizable>
       <promptingbehavior>0</promptingbehavior>
       <status>0</status>
     </connectionreference>
-    <connectionreference connectionreferencelogicalname="rmc_sharedexcelonlinebusiness_sora">
+    <connectionreference connectionreferencelogicalname="new_sharedexcelonlinebusiness_d9653">
+      <connectionid>shared-excelonlinebu-d9653e9a-ebda-4121-a3b6-a7c213fdd641</connectionid>
       <connectionreferencedisplayname>Excel Online SORA</connectionreferencedisplayname>
       <connectorid>/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness</connectorid>
       <iscustomizable>1</iscustomizable>

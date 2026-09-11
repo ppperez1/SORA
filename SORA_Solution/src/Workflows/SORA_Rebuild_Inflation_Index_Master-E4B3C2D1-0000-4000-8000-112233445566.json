@@ -4,7 +4,7 @@
       "shared_sharepointonline": {
         "runtimeSource": "embedded",
         "connection": {
-          "connectionReferenceLogicalName": "rmc_sharedsharepointonline_sora"
+          "connectionReferenceLogicalName": "new_sharedsharepointonline_83213"
         },
         "api": {
           "name": "shared_sharepointonline"
@@ -13,7 +13,7 @@
       "shared_excelonlinebusiness": {
         "runtimeSource": "embedded",
         "connection": {
-          "connectionReferenceLogicalName": "rmc_sharedexcelonlinebusiness_sora"
+          "connectionReferenceLogicalName": "new_sharedexcelonlinebusiness_d9653"
         },
         "api": {
           "name": "shared_excelonlinebusiness"
