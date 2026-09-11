@@ -101,6 +101,23 @@
         },
         "else": {
           "actions": {
+            "Copy_Master_File_To_Copy": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "CopyFile",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "https://amadeusworkplace.sharepoint.com/sites/CFA-RCTeamsite",
+                  "sourceFile": "Contract Fulfillment/1. AIR/OPM 03. Operations/05. Contractual Conditions Harmonization project/Pricing file transformation/Master data/SORA_Inflation_Index_Values.xlsx",
+                  "destination": "Contract Fulfillment/1. AIR/OPM 03. Operations/05. Contractual Conditions Harmonization project/Pricing file transformation/Master data/SORA_Inflation_Index_Values_copy.xlsx",
+                  "overwrite": true
+                }
+              },
+              "runAfter": {}
+            },
             "Run_Office_Script": {
               "type": "OpenApiConnection",
               "inputs": {
@@ -112,11 +129,16 @@
                 "parameters": {
                   "source": "groups/CFA-RCTeamsite",
                   "drive": "Contract Fulfillment",
-                  "file": "1. AIR/OPM 03. Operations/05. Contractual Conditions Harmonization project/Pricing file transformation/Master data/SORA_Inflation_Index_Values.xlsx",
+                  "file": "1. AIR/OPM 03. Operations/05. Contractual Conditions Harmonization project/Pricing file transformation/Master data/SORA_Inflation_Index_Values_copy.xlsx",
                   "scriptId": "Rebuild_SORA_Inflation_Index",
                   "parameters/airBps": "@outputs('Get_items_tbl_AIR_BPs')?['body/value']",
                   "parameters/inflationRates": "@outputs('Get_items_tbl_INFLATION_INDEX_RATES')?['body/value']"
                 }
+              },
+              "runAfter": {
+                "Copy_Master_File_To_Copy": [
+                  "Succeeded"
+                ]
               }
             }
           }
