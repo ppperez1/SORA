@@ -59,7 +59,6 @@
             "parameters": {
               "dataset": "https://amadeusworkplace.sharepoint.com/sites/RMC_SORA",
               "table": "tbl_AIR_BPs",
-              "$select": "Id,PVC_Business_Partner,BP_Desc",
               "$top": 5000
             },
             "authentication": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
@@ -82,7 +81,6 @@
             "parameters": {
               "dataset": "https://amadeusworkplace.sharepoint.com/sites/RMC_SORA",
               "table": "tbl_INFLATION_INDEX_RATES",
-              "$select": "Business_Partner_ID,Index_Code,Applicable_Year,Rate,Inflation_Index_ID",
               "$top": 5000
             },
             "authentication": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
