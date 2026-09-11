@@ -1,0 +1,164 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cr9b4_sharedsharepointonline_sora"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      },
+      "shared_excelonlinebusiness": {
+        "runtimeSource": "embedded",
+        "connection": {
+          "connectionReferenceLogicalName": "cr9b4_sharedexcelonlinebusiness_sora"
+        },
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "type": "Recurrence",
+          "recurrence": {
+            "frequency": "Day",
+            "interval": 1,
+            "schedule": {
+              "hours": [
+                6
+              ],
+              "minutes": [
+                0
+              ]
+            },
+            "timeZone": "Romance Standard Time"
+          }
+        }
+      },
+      "actions": {
+        "Get_items_tbl_AIR_BPs": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetItems",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://amadeusworkplace.sharepoint.com/sites/RMC_SORA",
+              "table": "tbl_AIR_BPs",
+              "$select": "Id,PVC_Business_Partner,BP_Desc",
+              "$top": 5000
+            },
+            "authentication": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
+          },
+          "runtimeConfiguration": {
+            "paginationPolicy": {
+              "minimumItemCount": 100000
+            }
+          },
+          "runAfter": {}
+        },
+        "Get_items_tbl_INFLATION_INDEX_RATES": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetItems",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "https://amadeusworkplace.sharepoint.com/sites/RMC_SORA",
+              "table": "tbl_INFLATION_INDEX_RATES",
+              "$select": "Business_Partner_ID,Index_Code,Applicable_Year,Rate,Inflation_Index_ID",
+              "$top": 5000
+            },
+            "authentication": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
+          },
+          "runtimeConfiguration": {
+            "paginationPolicy": {
+              "minimumItemCount": 100000
+            }
+          },
+          "runAfter": {
+            "Get_items_tbl_AIR_BPs": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Condition_Validate_Data_Not_Empty": {
+          "type": "If",
+          "expression": {
+            "or": [
+              {
+                "equals": [
+                  "@length(outputs('Get_items_tbl_AIR_BPs')?['body/value'])",
+                  0
+                ]
+              },
+              {
+                "equals": [
+                  "@length(outputs('Get_items_tbl_INFLATION_INDEX_RATES')?['body/value'])",
+                  0
+                ]
+              }
+            ]
+          },
+          "actions": {
+            "Terminate_On_Empty_Data": {
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Failed",
+                "runCode": "500",
+                "runError": {
+                  "message": "Una de las listas de SharePoint devolvió 0 elementos. Se aborta la ejecución para proteger el libro maestro."
+                }
+              }
+            }
+          },
+          "else": {
+            "actions": {
+              "Run_Office_Script": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "connectionName": "shared_excelonlinebusiness",
+                    "operationId": "ExecuteScriptV2",
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness"
+                  },
+                  "parameters": {
+                    "source": "groups/CFA-RCTeamsite",
+                    "drive": "Contract Fulfillment",
+                    "file": "1. AIR/OPM 03. Operations/05. Contractual Conditions Harmonization project/Pricing file transformation/Master data/SORA_Inflation_Index_Values.xlsx",
+                    "scriptId": "Rebuild_SORA_Inflation_Index",
+                    "parameters/airBps": "@outputs('Get_items_tbl_AIR_BPs')?['body/value']",
+                    "parameters/inflationRates": "@outputs('Get_items_tbl_INFLATION_INDEX_RATES')?['body/value']"
+                  },
+                  "authentication": "@parameters('$connections')['shared_excelonlinebusiness']['connectionId']"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Get_items_tbl_INFLATION_INDEX_RATES": [
+              "Succeeded"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

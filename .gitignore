@@ -1,0 +1,15 @@
+# VS Code
+.vscode/*
+!.vscode/mcp.json
+
+# Build outputs
+*.zip
+temp_solution_build/
+bin/
+obj/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
